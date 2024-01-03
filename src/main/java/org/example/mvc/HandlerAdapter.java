@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HandlerAdapter {
 
-    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Controller handler) {
-        Object result = handler.handleRequest(request, response);
+    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        Object result = ((Controller)handler).handleRequest(request, response);
         if (result instanceof String) {
             return new ModelAndView(String.valueOf(result));
         }
