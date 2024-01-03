@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ForwardController implements Controller{
-    private static final Logger log = LoggerFactory.getLogger(ForwardController.class);
+public class RedirectController implements Controller{
+    private static final Logger log = LoggerFactory.getLogger(RedirectController.class);
     @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         log.info("[ForwardController] handleRequest");

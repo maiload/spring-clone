@@ -1,7 +1,7 @@
 package org.example.mvc;
 
 import org.example.mvc.controller.Controller;
-import org.example.mvc.controller.ForwardController;
+import org.example.mvc.controller.RedirectController;
 import org.example.mvc.controller.HomeController;
 import org.example.mvc.controller.RequestMethod;
 
@@ -19,7 +19,7 @@ public class InterfaceHandlerMapper implements HandlerMapper{
     @Override
     public void init() {   // Reflections 사용하여 자동 등록 안됨 -> 컨트롤러에 매핑 url 정보가 없음
         handlers.put(new HandlerKey(RequestMethod.GET, "/"), new HomeController());
-        handlers.put(new HandlerKey(RequestMethod.GET, "/forward"), new ForwardController());
+        handlers.put(new HandlerKey(RequestMethod.GET, "/redirect"), new RedirectController());
     }
 
     @Override

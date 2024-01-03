@@ -20,4 +20,11 @@ public class JspRedirectView implements View {
     public void render(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws ServletException, IOException {
         response.sendRedirect(uriPath.substring(DEFAULT_REDIRECT_PREFIX.length()));
     }
+
+    @Override
+    public String toString() {
+        return "JspRedirectView{" +
+                "uriPath='" + uriPath + '\'' +
+                '}';
+    }
 }

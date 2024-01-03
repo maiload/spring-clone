@@ -25,7 +25,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper());
+        this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper("org.example.mvc"));
         this.jspViewResolver = new JspViewResolver();
         this.handlerAdapters = List.of(new InterfaceHandlerAdapter(), new AnnotationHandlerAdapter());
         log.info("[DispatcherServlet] initialized.");
@@ -48,9 +48,16 @@ public class DispatcherServlet extends HttpServlet {
                 .findFirst()
                 .orElseThrow(() -> new ServletException("No adapter for handler [" + handler + "]"));
 
-        ModelAndView modelAndView = handlerAdapter.handle(request, response, handler);
+        ModelAndView modelAndView;
+        try {
+            modelAndView = handlerAdapter.handle(request, response, handler);
+        } catch (Exception e) {
+            log.error("exception occurred: [{}]", e.getMessage(), e);
+            throw new ServletException();
+        }
 
         View view = jspViewResolver.resolveView(modelAndView.getViewName());
+        log.info("VIEW : {}", view.toString());
         view.render(request, response, modelAndView.getModel());
     }
 }
