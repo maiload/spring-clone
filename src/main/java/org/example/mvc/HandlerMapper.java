@@ -1,6 +1,7 @@
 package org.example.mvc;
 
 import org.example.mvc.controller.Controller;
+import org.example.mvc.controller.ForwardController;
 import org.example.mvc.controller.HomeController;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class HandlerMapper {
 
     private void init() {
         handlers.put("/", new HomeController());
+        handlers.put("/forward", new ForwardController());
     }
 
     public Controller findHandler(String uriPath){

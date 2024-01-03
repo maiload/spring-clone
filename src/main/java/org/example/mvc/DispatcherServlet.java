@@ -1,10 +1,11 @@
 package org.example.mvc;
 
 import org.example.mvc.controller.Controller;
+import org.example.mvc.view.JspViewResolver;
+import org.example.mvc.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +17,12 @@ import java.io.IOException;
 public class DispatcherServlet extends HttpServlet {
     private final static Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
     private HandlerMapper handlerMapper;
+    private JspViewResolver jspViewResolver;
 
     @Override
     public void init() throws ServletException {
         this.handlerMapper = new HandlerMapper();
+        this.jspViewResolver = new JspViewResolver();
         log.info("[DispatcherServlet] initialized.");
     }
 
@@ -34,7 +37,7 @@ public class DispatcherServlet extends HttpServlet {
         Controller handler = handlerMapper.findHandler(request.getRequestURI());
         String viewName = handler.handleRequest(request, response);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(viewName);
-        requestDispatcher.forward(request, response);
+        View view = jspViewResolver.resolveView(viewName);
+        view.render(request, response);
     }
 }
