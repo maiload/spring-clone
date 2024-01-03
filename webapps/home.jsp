@@ -9,5 +9,6 @@
 </head>
 <body>
 Home 페이지
+    <h1>Home: ${home}</h1>
 </body>
 </html>

@@ -8,6 +8,6 @@ public class JspViewResolver{
             return new JspRedirectView(viewName);
         }
 
-        return new JspView(viewName);
+        return new JspView(viewName + ".jsp");
     }
 }
