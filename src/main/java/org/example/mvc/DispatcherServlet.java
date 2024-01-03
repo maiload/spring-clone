@@ -1,6 +1,5 @@
 package org.example.mvc;
 
-import org.example.mvc.controller.Controller;
 import org.example.mvc.controller.RequestMethod;
 import org.example.mvc.view.JspViewResolver;
 import org.example.mvc.view.ModelAndView;
@@ -22,13 +21,13 @@ public class DispatcherServlet extends HttpServlet {
     private final static Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
     private List<HandlerMapper> handlerMappers;
     private JspViewResolver jspViewResolver;
-    private HandlerAdapter handlerAdapter;
+    private List<HandlerAdapter> handlerAdapters;
 
     @Override
     public void init() throws ServletException {
         this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper());
         this.jspViewResolver = new JspViewResolver();
-        this.handlerAdapter = new HandlerAdapter();
+        this.handlerAdapters = List.of(new InterfaceHandlerAdapter(), new AnnotationHandlerAdapter());
         log.info("[DispatcherServlet] initialized.");
     }
 
@@ -43,6 +42,11 @@ public class DispatcherServlet extends HttpServlet {
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(() -> new ServletException("No handler for [" + requestMethod + "," + requestURI + "]"));
+
+        HandlerAdapter handlerAdapter = handlerAdapters.stream()
+                .filter(adapter -> adapter.support(handler))
+                .findFirst()
+                .orElseThrow(() -> new ServletException("No adapter for handler [" + handler + "]"));
 
         ModelAndView modelAndView = handlerAdapter.handle(request, response, handler);
 
