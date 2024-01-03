@@ -12,8 +12,6 @@ public class ForwardController implements Controller{
     @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         log.info("[ForwardController] handleRequest");
-        ModelAndView modelAndView = new ModelAndView("redirect:/");
-        modelAndView.addObject("name", "홍길동");
-        return modelAndView;
+        return new ModelAndView("redirect:/");
     }
 }

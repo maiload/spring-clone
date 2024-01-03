@@ -31,10 +31,6 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if ("/favicon.ico".equals(request.getRequestURI())) {
-            log.debug("Ignoring favicon.ico request.");
-            return;
-        }
         log.info("[DispatcherServlet] service started.");
 
         Controller handler = handlerMapper.findHandler(request.getRequestURI());
