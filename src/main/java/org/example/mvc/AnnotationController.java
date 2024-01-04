@@ -5,7 +5,6 @@ import org.example.mvc.view.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public class AnnotationController {
@@ -23,6 +22,7 @@ public class AnnotationController {
 //        Object handler = constructor.newInstance();
 
         Object handler = BeanFactory.getBean(clazz);
+
         int parameterCount = method.getParameterCount();
         Object result;
         if (parameterCount == 2) {

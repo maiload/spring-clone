@@ -1,10 +1,12 @@
 package org.example.mvc;
 
+import org.example.aop.Advice;
+import org.example.aop.AspectHandler;
 import org.example.di.BeanFactory;
+import org.example.mvc.controller.HomeController;
 import org.example.mvc.controller.RequestMethod;
 import org.example.mvc.view.JspViewResolver;
 import org.example.mvc.view.ModelAndView;
-import org.example.mvc.view.View;
 import org.example.mvc.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,17 @@ public class DispatcherServlet extends HttpServlet {
     public void init() throws ServletException {
         log.debug("[DispatcherServlet] init.");
         new BeanFactory();
+        addAspect();
         this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper("org.example.mvc"));
         this.handlerAdapters = List.of(new InterfaceHandlerAdapter(), new AnnotationHandlerAdapter());
         this.viewResolvers = Collections.singletonList(new JspViewResolver());
+    }
+
+    private void addAspect() {
+        AspectHandler aspectHandler = new AspectHandler();
+        aspectHandler.addProxy(HomeController.class, () -> {
+            log.info("Hello! Welcome to visit out site.");
+        });
     }
 
     @Override

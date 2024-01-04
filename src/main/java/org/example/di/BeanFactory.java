@@ -3,6 +3,8 @@ package org.example.di;
 import org.example.mvc.annotation.Autowired;
 import org.example.mvc.annotation.Controller;
 import org.example.mvc.annotation.Repository;
+import org.example.mvc.controller.HomeController;
+import org.example.mvc.controller.RedirectController;
 import org.example.mvc.controller.UserController;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
@@ -30,6 +32,8 @@ public class BeanFactory {
             Object instance = createInstance(clazz);
             beans.put(clazz, instance);
         });
+        beans.put(HomeController.class, new HomeController());
+        beans.put(RedirectController.class, new RedirectController());
         log.debug("[BeanFactory] Beans initialized");
     }
 
