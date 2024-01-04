@@ -1,6 +1,5 @@
 package org.example.mvc;
 
-import org.example.aop.Advice;
 import org.example.aop.AspectHandler;
 import org.example.di.BeanFactory;
 import org.example.mvc.controller.HomeController;
@@ -20,6 +19,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static org.example.aop.Aop.AFTER;
+import static org.example.aop.Aop.BEFORE;
 
 @WebServlet("/")
 public class DispatcherServlet extends HttpServlet {
@@ -42,7 +44,7 @@ public class DispatcherServlet extends HttpServlet {
         AspectHandler aspectHandler = new AspectHandler();
         aspectHandler.addProxy(HomeController.class, () -> {
             log.info("Hello! Welcome to visit out site.");
-        });
+        }, AFTER);
     }
 
     @Override
