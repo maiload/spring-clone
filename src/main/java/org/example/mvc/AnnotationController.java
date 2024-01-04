@@ -1,5 +1,6 @@
 package org.example.mvc;
 
+import org.example.di.BeanFactory;
 import org.example.mvc.view.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,11 @@ public class AnnotationController {
     }
 
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Constructor<?> constructor = clazz.getDeclaredConstructor();
-        Object handler = constructor.newInstance();
+        // 생성하는 부분 -> beanFactory 로 이동
+//        Constructor<?> constructor = clazz.getDeclaredConstructor();
+//        Object handler = constructor.newInstance();
+
+        Object handler = BeanFactory.getBean(clazz);
         int parameterCount = method.getParameterCount();
         Object result;
         if (parameterCount == 2) {

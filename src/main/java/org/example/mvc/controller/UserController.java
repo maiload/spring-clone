@@ -19,6 +19,10 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRepository;
 
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;

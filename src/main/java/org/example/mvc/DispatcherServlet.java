@@ -1,5 +1,6 @@
 package org.example.mvc;
 
+import org.example.di.BeanFactory;
 import org.example.mvc.controller.RequestMethod;
 import org.example.mvc.view.JspViewResolver;
 import org.example.mvc.view.ModelAndView;
@@ -27,10 +28,11 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        log.debug("[DispatcherServlet] init.");
+        new BeanFactory();
         this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper("org.example.mvc"));
         this.handlerAdapters = List.of(new InterfaceHandlerAdapter(), new AnnotationHandlerAdapter());
         this.viewResolvers = Collections.singletonList(new JspViewResolver());
-        log.debug("[DispatcherServlet] initialized.");
     }
 
     @Override
