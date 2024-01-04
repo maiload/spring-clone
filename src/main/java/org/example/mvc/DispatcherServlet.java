@@ -4,6 +4,7 @@ import org.example.mvc.controller.RequestMethod;
 import org.example.mvc.view.JspViewResolver;
 import org.example.mvc.view.ModelAndView;
 import org.example.mvc.view.View;
+import org.example.mvc.view.ViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,20 +22,20 @@ import java.util.Objects;
 public class DispatcherServlet extends HttpServlet {
     private final static Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
     private List<HandlerMapper> handlerMappers;
-    private JspViewResolver jspViewResolver;
     private List<HandlerAdapter> handlerAdapters;
+    private List<ViewResolver> viewResolvers;
 
     @Override
     public void init() throws ServletException {
         this.handlerMappers = List.of(new InterfaceHandlerMapper(), new AnnotationHandlerMapper("org.example.mvc"));
-        this.jspViewResolver = new JspViewResolver();
         this.handlerAdapters = List.of(new InterfaceHandlerAdapter(), new AnnotationHandlerAdapter());
-        log.info("[DispatcherServlet] initialized.");
+        this.viewResolvers = Collections.singletonList(new JspViewResolver());
+        log.debug("[DispatcherServlet] initialized.");
     }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("[DispatcherServlet] service started.");
+        log.debug("[DispatcherServlet] service started.");
         String requestURI = request.getRequestURI();
         RequestMethod requestMethod = RequestMethod.valueOf(request.getMethod());
 
@@ -56,8 +58,17 @@ public class DispatcherServlet extends HttpServlet {
             throw new ServletException();
         }
 
-        View view = jspViewResolver.resolveView(modelAndView.getViewName());
-        log.info("VIEW : {}", view.toString());
-        view.render(request, response, modelAndView.getModel());
+        viewResolvers.stream()
+                .map(viewResolver -> viewResolver.resolveView(modelAndView.getViewName()))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .ifPresent(view -> {
+                    try {
+//                        log.debug("VIEW : {}", view);
+                        view.render(request, response, modelAndView.getModel());
+                    } catch (Exception e) {
+                        log.error("exception occurred: [{}]", e.getMessage(), e);
+                    }
+                });
     }
 }
