@@ -74,7 +74,6 @@ public class DispatcherServlet extends HttpServlet {
 
         viewResolvers.stream()
                 .map(viewResolver -> viewResolver.resolveView(modelAndView.getViewName()))
-                .filter(Objects::nonNull)
                 .findFirst()
                 .ifPresent(view -> {
                     try {
